@@ -5,5 +5,6 @@
 CRUD, 페이징, 회원가입, 로그인등 기본 기능 구현만 해보기
 
 
-Java 21, H2, Spring, SPringDataJPA
+Java 21, H2, Spring, SpringDataJPA
 
+도메인, ERD 설계없이 그냥 작동만 하는 목적으로 필요할 때 개발할 생각

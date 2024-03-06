@@ -1,0 +1,26 @@
+spring:
+  #DB 접근 관리
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/demo
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  #jpa 설정 관리
+    jpa:
+      # create로 되어있으면 테이블이 계속 생김, 처음에만 쓰고 update로 변경
+     hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+      #sql 보기 쉽게 하기
+      format_sql: true
+
+
+# 모든 출력은 로그를 남기면 좋음
+logging.level:
+  org.hibernate.SQL: debug
+
+
+# 여긴 나중에 공부, 대충 DB 연결 세팅과 로그관리 할때 초기 설정하는 곳
