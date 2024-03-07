@@ -114,4 +114,5 @@ public class Member extends BaseEntity {
     // Comment 의 Member member를 연관관계의 주인으로 주겠다는 소리, 주인이 아닌쪽은 mappedby를 사용
     @OneToMany(mappedBy = "member")
     List<Comment> comments = new ArrayList<>();
+
 }

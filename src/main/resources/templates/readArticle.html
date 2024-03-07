@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세조회</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* 내부 콘텐츠를 포함하기 위해 추가 */
+        }
+        h2 {
+            text-align: center;
+            color: #2196F3;
+            margin-bottom: 100px;
+        }
+        .post {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+        }
+        .post-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 50px;
+            float: left; /* 왼쪽으로 부유시킴 */
+        }
+        .post-info {
+            color: #888;
+            margin-bottom: 10px;
+            float: right; /* 오른쪽으로 부유시킴 */
+        }
+        .post-content {
+            color: #555;
+            margin-bottom: 10px;
+            clear: both; /* 부유 요소들을 지움 */
+        }
+        .comments {
+            margin-top: 20px;
+        }
+        .comment {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .comment-author {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .comment-content {
+            color: #555;
+        }
+        .add-comment {
+            margin-top: 20px;
+            text-align: center;
+            width: 100%; /* 부모 요소의 너비와 동일하게 함 */
+        }
+        .add-comment textarea {
+            width: calc(100% - 22px); /* 오른쪽의 스크롤바 고려한 너비 설정 */
+            height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            float: left; /* 왼쪽으로 부유시킴 */
+        }
+        .add-comment input[type="submit"] {
+            background-color: #2196F3;
+            color: #fff;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right; /* 오른쪽으로 부유시킴 */
+        }
+        .add-comment input[type="submit"]:hover {
+            background-color: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>게시글 상세조회</h2>
+    <div class="post">
+        <div class="post-title">게시글 제목</div>
+        <div class="post-info">작성자: 사용자1</div>
+        <div class="post-content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit semper luctus. Phasellus ut libero id justo congue commodo ac nec ipsum. Phasellus interdum varius odio, sit amet ultrices sapien cursus et. Sed nec sapien libero. Vestibulum nec turpis vel libero ultrices feugiat.
+        </div>
+    </div>
+    <div class="comments">
+        <h3>댓글</h3>
+        <div class="comment">
+            <div class="comment-author">댓글 작성자1</div>
+            <div class="comment-content">댓글 내용1</div>
+        </div>
+        <div class="comment">
+            <div class="comment-author">댓글 작성자2</div>
+            <div class="comment-content">댓글 내용2</div>
+        </div>
+        <!-- 댓글이 많아질 경우에 대비하여 세로 스크롤을 생성합니다 -->
+    </div>
+    <div class="add-comment">
+        <form action="/add_comment" method="post">
+            <textarea id="comment" name="comment" placeholder="댓글을 입력하세요" required></textarea>
+            <input type="submit" value="댓글 추가">
+        </form>
+    </div>
+</div>
+</body>
+</html>
