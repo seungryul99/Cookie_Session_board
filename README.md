@@ -18,3 +18,6 @@
 3. ERD 설계후 Entity 구현 <br/><br/>
 4. Entity간 연관관계 구현 <br/><br/>
 5. Chat GPT 도움으로 상세페이지 html 제작 <br/><br/>
+6. Repository 구현 <br/><br/>
+7. 우선 게시글 구현부터 하기로 함 <br/><br/>
+8. ArticleService 구현 완료 <br/><br/>
