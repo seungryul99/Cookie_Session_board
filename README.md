@@ -17,3 +17,4 @@
 1. application.yml 설정 + H2 DB 연결 <br/><br/>
 2. 패키지 구조 설정 <br/><br/>
 3. ERD 설계후 Entity 구현 
+4. Entity간 연관관계 구현

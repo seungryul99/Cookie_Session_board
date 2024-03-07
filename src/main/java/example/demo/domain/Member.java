@@ -4,6 +4,9 @@ import example.demo.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *  @Entity가 붙으면 JPA가 관리함
  *  JPA를 이용해서 테이블과 매핑할 클래스에 필수로 붙여줌
@@ -83,17 +86,17 @@ import lombok.*;
  */
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member extends BaseEntity {
 
-    @Id
+    @Id @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "member_id")
-    private String memberId;
+    @Column(name = "login_id")
+    private String loginId;
 
     @Column(name = "password")
     private String password;
@@ -101,4 +104,14 @@ public class Member extends BaseEntity {
     @Column(name = "nickname")
     private String nickname;
 
+
+    /**
+     *  빌더 패턴 사용시 필수 파라미터 예외처리를 해줘야하는데 이건 나중에
+     *  예외처리는 예외처리 할 때 같이하자
+     */
+
+    // 양방향 매핑 예시를 넣어둠, 혹시라도 회원이 쓴 댓글을 몰아서 조회할 일이 있을 수 있음
+    // Comment 의 Member member를 연관관계의 주인으로 주겠다는 소리, 주인이 아닌쪽은 mappedby를 사용
+    @OneToMany(mappedBy = "member")
+    List<Comment> comments = new ArrayList<>();
 }

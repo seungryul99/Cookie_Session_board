@@ -6,15 +6,24 @@ import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 public class Comment extends BaseEntity {
 
-    @Id
+    @Id @Column (name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Lob
     private String content;
+
+    @ManyToOne
+    @JoinColumn (name = "member_id")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "article_id")
+    private Article article;
+
 }

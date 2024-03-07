@@ -13,12 +13,13 @@ import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor (access = AccessLevel.PRIVATE)
-@Builder
 public class Article extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @Column (name = "article_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column (name = "title")
@@ -26,5 +27,10 @@ public class Article extends BaseEntity {
 
     @Lob
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
 
 }
