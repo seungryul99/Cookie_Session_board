@@ -21,3 +21,7 @@
 6. Repository 구현 <br/><br/>
 7. 우선 게시글 구현부터 하기로 함 <br/><br/>
 8. ArticleService 구현 완료 <br/><br/>
+9. Article 관련 페이지 타임리프 작성 <br/><br/>
+10. ArticleController 작성 <br/><br/>
+11. 로그인 구현 <br/><br/>
+12. 내 글 수정하기, 삭제하기 구현 <br/><br/>

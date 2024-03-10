@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative; /* 부모 요소로부터의 위치 상대적으로 설정 */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 50px;
+            color: #2196F3;
+        }
+        .article {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .article-item {
+            padding: 0 10px;
+        }
+        .article-item:first-child {
+            flex: 0.5;
+        }
+        .article-item:nth-child(2) {
+            flex: 2;
+            font-weight: bold;
+        }
+        .article-item:last-child {
+            flex: 1;
+            text-align: right;
+        }
+        a {
+            text-decoration: none;
+            color: #2196F3;
+            cursor: pointer;
+        }
+        a:hover {
+            text-decoration: none;
+            color: #0b7dda;
+        }
+        /* 글 작성 버튼 스타일 */
+        .write-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2196F3;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .write-button:hover {
+            background-color: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>게시판</h1>
+    <div class="article article-list">
+        <div class="article-item">글번호</div>
+        <div class="article-item">제목</div>
+        <div class="article-item">작성자</div>
+    </div>
+    <!-- Thymeleaf 반복문을 사용하여 게시글들을 표시 -->
+    <div th:each="article : ${articles}" class="article">
+        <div class="article-item" th:text="${article.id}">글번호</div>
+        <div class="article-item">
+            <a th:href="@{'/article/' + ${article.id}}" th:text="${article.title}">제목</a>
+        </div>
+        <div class="article-item" >작성자</div>
+    </div>
+
+    <br/><br/><br/><br/>
+
+    <!-- 글 작성 버튼 -->
+    <button class="write-button" onclick="location.href='articleCreateForm.html'" type="button">글 작성</button>
+</div>
+</body>
+</html>

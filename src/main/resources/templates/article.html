@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,7 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
+            position: relative; /* 부모 요소로부터의 위치 상대적으로 설정 */
         }
         .container {
             max-width: 800px;
@@ -25,23 +26,23 @@
             color: #2196F3;
             margin-bottom: 100px;
         }
-        .post {
+        .article {
             margin-bottom: 30px;
             border-bottom: 1px solid #ccc;
             padding-bottom: 20px;
         }
-        .post-title {
+        .article-title {
             font-size: 24px;
             color: #333;
             margin-bottom: 50px;
             float: left; /* 왼쪽으로 부유시킴 */
         }
-        .post-info {
+        .article-info {
             color: #888;
             margin-bottom: 10px;
             float: right; /* 오른쪽으로 부유시킴 */
         }
-        .post-content {
+        .article-content {
             color: #555;
             margin-bottom: 10px;
             clear: both; /* 부유 요소들을 지움 */
@@ -66,7 +67,7 @@
         }
         .add-comment {
             margin-top: 20px;
-            text-align: center;
+            text-align: right; /* 오른쪽 정렬 */
             width: 100%; /* 부모 요소의 너비와 동일하게 함 */
         }
         .add-comment textarea {
@@ -86,39 +87,59 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            float: right; /* 오른쪽으로 부유시킴 */
+            margin-left: 10px; /* 좌우 간격 추가 */
         }
         .add-comment input[type="submit"]:hover {
             background-color: #0b7dda;
+        }
+        /* 목록으로 버튼 스타일 */
+        .list-button {
+            background-color: #ddd; /* 은은한 회색 배경색 */
+            color: #333; /* 글자색 */
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            float: right; /* 오른쪽으로 부유시킴 */
+            margin-left: 10px; /* 좌우 간격 추가 */
+            font-size: 16px;
+        }
+
+        .list-button:hover {
+            background-color: #ccc; /* 마우스 호버 시 조금 더 진한 회색으로 */
+        }
+
+        /* 게시글과 댓글을 나누는 수평선 위로 버튼 이동 */
+        .list-button-container {
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h2>게시글 상세조회</h2>
-    <div class="post">
-        <div class="post-title">게시글 제목</div>
-        <div class="post-info">작성자: 사용자1</div>
-        <div class="post-content">
+    <div class="article">
+        <div class="article-title" th:text="${article.title}">게시글 제목</div>
+        <div class="article-info">작성자: <span >사용자1</span></div>
+        <div class="article-content" th:text="${article.content}">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit semper luctus. Phasellus ut libero id justo congue commodo ac nec ipsum. Phasellus interdum varius odio, sit amet ultrices sapien cursus et. Sed nec sapien libero. Vestibulum nec turpis vel libero ultrices feugiat.
         </div>
     </div>
+
+    <!-- "목록으로" 버튼 -->
+    <div class="list-button-container">
+        <a href="/articles" class="list-button">목록으로</a>
+    </div>
+
+    <br/><br/><br/>
     <div class="comments">
         <h3>댓글</h3>
-        <div class="comment">
-            <div class="comment-author">댓글 작성자1</div>
-            <div class="comment-content">댓글 내용1</div>
-        </div>
-        <div class="comment">
-            <div class="comment-author">댓글 작성자2</div>
-            <div class="comment-content">댓글 내용2</div>
-        </div>
-        <!-- 댓글이 많아질 경우에 대비하여 세로 스크롤을 생성합니다 -->
+        <!-- 여기에 댓글 내용 추가 -->
     </div>
     <div class="add-comment">
         <form action="/add_comment" method="post">
             <textarea id="comment" name="comment" placeholder="댓글을 입력하세요" required></textarea>
-            <input type="submit" value="댓글 추가">
+            <input type="submit" value="댓글 추가" class="add-comment-button">
         </form>
     </div>
 </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,17 +53,43 @@
         input[type="submit"]:hover {
             background-color: #0b7dda;
         }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .button-container button {
+            width: 48%;
+        }
+        .btn-primary {
+            background-color: #2196F3;
+            color: #fff;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-secondary {
+            background-color: black;
+            color: #fff;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h2>게시글 작성</h2>
-    <form action="/post" method="post">
+    <form action="" th:action="@{/article}" method="post">
         <label for="title">제목:</label>
         <input type="text" id="title" name="title" required>
         <label for="content">내용:</label>
         <textarea id="content" name="content" required></textarea>
-        <input type="submit" value="작성하기">
+        <div class="button-container">
+            <button class="btn btn-primary" type="submit">등록</button>
+            <button class="btn btn-secondary" onclick="location.href='/articles'" type="button">취소</button>
+        </div>
     </form>
 </div>
 </body>
