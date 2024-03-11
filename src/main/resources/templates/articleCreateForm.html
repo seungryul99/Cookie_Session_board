@@ -87,7 +87,9 @@
         <label for="content">내용:</label>
         <textarea id="content" name="content" required></textarea>
         <div class="button-container">
+            <!-- 이거 누르면 POST, /article 이 됨-->
             <button class="btn btn-primary" type="submit">등록</button>
+            <!-- 이거 누르면 GET, /articles가 됨-->
             <button class="btn btn-secondary" onclick="location.href='/articles'" type="button">취소</button>
         </div>
     </form>
