@@ -60,11 +60,14 @@ public class ArticleServiceImpl implements ArticleService{
     @Autowired
     private final ArticleRepository articleRepository;
 
+
+
+    // dto + builder 다 추가 해 줘야 함
+    // 그전에 로그인을 구현하고 권한 조정을 해줘야 할듯 함
+
     @Transactional
     @Override
-    public void writeArticle(Article article) {
-        articleRepository.save(article);
-    }
+    public void writeArticle(Article article) {articleRepository.save(article);}
 
     @Override
     public List<Article> getAllArticles() {
