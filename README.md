@@ -23,5 +23,4 @@
 8. ArticleService 구현 완료 <br/><br/>
 9. Article 관련 페이지 타임리프 작성 <br/><br/>
 10. ArticleController 작성 <br/><br/>
-11. 로그인 구현 <br/><br/>
-12. 내 글 수정하기, 삭제하기 구현 <br/><br/>
+11. 자격증 시험으로 인해 프로젝트 중단
