@@ -9,10 +9,9 @@ public interface MemberService {
 
 
     // 회원가입 
-    void saveMemberInDB(Member member);
+    void saveMember(Member member);
 
     
     // 로그인
-
-
+    void login(String loginId, String password);
 }
