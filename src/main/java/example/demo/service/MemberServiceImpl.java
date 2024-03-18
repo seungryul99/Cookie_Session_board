@@ -17,9 +17,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
 
-    /**
-     *  실제 회원가입 구현이 어떤식으로 진행 될지 모르겠어서 그냥 DB에 새로운 Member를 등록 하는 방식을 사용함
-     */
     @Override
     public void saveMember(Member member){
         memberRepository.save(member);

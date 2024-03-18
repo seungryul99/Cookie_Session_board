@@ -86,22 +86,20 @@ import java.util.List;
  */
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Member extends BaseEntity {
+public class Member {
 
     @Id @Column(name = "member_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    @Column(name = "login_id")
     private String loginId;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "nickname")
     private String nickname;
 
 
