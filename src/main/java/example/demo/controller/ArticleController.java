@@ -96,6 +96,17 @@ public class ArticleController {
     }
 
 
-    // update는 나중에 내 글 수정하기 기능으로 만들예정, delete도 마찬가지, 로그인, 권한 부여를 해야 가능
+    @PostMapping("/update")
+    public String updateArticleForm(@CookieValue(name = "memberId") Long memberId,
+                                    @RequestParam(name = "title") String title,
+                                    @RequestParam(name = "content") String content){
+
+
+
+
+
+        return "updateArticleForm";
+    }
+
 
 }
