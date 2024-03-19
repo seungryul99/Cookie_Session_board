@@ -144,17 +144,13 @@
         </div>
     </div>
 
+    <!-- 수정하기 및 삭제하기 버튼 -->
+    <div class="edit-delete-buttons">
 
     </div>
 
     <!-- "목록으로" 버튼 -->
     <div class="list-button-container">
-        <form action="post" th:href="@{/update}">
-            <input type="hidden" name="title" th:value="${article.title}">
-            <input type="hidden" name="content" th:value="${article.content}">
-            <button type="submit" class="list-button">수정하기</button>
-        </form>
-<!--        <a href="/delete" class="list-button">삭제하기</a>-->
         <a href="/articles" class="list-button">목록으로</a>
     </div>
 
@@ -169,6 +165,8 @@
             <input type="submit" value="댓글 추가" class="add-comment-button">
         </form>
     </div>
+
+
 </div>
 </body>
 </html>
