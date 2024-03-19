@@ -3,12 +3,14 @@ package example.demo.controller;
 
 import example.demo.domain.Member;
 import example.demo.service.MemberService;
+import example.demo.service.MemberServiceImpl;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,9 +25,6 @@ public class MemberController {
     public String signupForm(){
         return "signup";
     }
-
-
-    // 검증, 예외 처리는 나중에
 
     /**
      *   이 부분은 @ModelAttribute로 해결 할 수도 있다
@@ -55,11 +54,16 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(@RequestParam("loginId") String loginId,
-                        @RequestParam("password") String password){
+                        @RequestParam("password") String password,
+                        HttpServletResponse response){
 
-        memberService.login(loginId,password);
+        Member loginMember = memberService.login(loginId,password);
+        
+        // 쿠키에 시간에 대한 정보를 주지 않으면 브라우저 종료시 종료되는 세션쿠키가 됨
+        Cookie idCookie = new Cookie("memberId", loginMember.getId().toString());
+        response.addCookie(idCookie);
 
-        return "redirect:/";
+        return "redirect:/articles";
     }
 
 }

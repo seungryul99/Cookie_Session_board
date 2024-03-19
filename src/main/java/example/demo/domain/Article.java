@@ -1,6 +1,5 @@
 package example.demo.domain;
 
-import example.demo.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,13 +15,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor (access = AccessLevel.PRIVATE)
-public class Article extends BaseEntity {
+public class Article {
 
     @Id @Column (name = "article_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    @Column (name = "title")
+    @Column
     private String title;
 
     @Lob
@@ -31,6 +30,5 @@ public class Article extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
-
 
 }

@@ -1,7 +1,9 @@
 package example.demo.controller;
 
 import example.demo.domain.Article;
+import example.demo.domain.Member;
 import example.demo.service.ArticleService;
+import example.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -18,6 +21,9 @@ public class ArticleController {
     @Autowired
     private final ArticleService articleService;
 
+    @Autowired
+    private final MemberService memberService;
+
 
     /**
      *   전체 게시물 모아 보기
@@ -25,8 +31,20 @@ public class ArticleController {
      *   DB에서 모든 article이 담긴 List인 articles를 반환 받고
      *   이를 모델에 저장함, articles.html(뷰) 에서 articles 라는 이름으로 참조해서 사용할 수 있음
      */
+
+    /**
+     *      @CookieValue(name = "memberId", required = false) Long MemberId
+     *      memberId 라는 쿠키를 꺼내와서 바인딩 해줌
+     *      쿠키에 들어갈때 Long -> String 으로 넣어줬음
+     */
+    
+    // 만약 쿠키를 가지고 있지 않은 사용자가 URL로 articles 에 뚫고 들어오려고 할 때 예외처리룰 위해서 required=false를 사용했는데 이게 맞는지는 모르겠다
     @GetMapping("/articles")
-    public String articles(Model model){
+    public String articles(@CookieValue(name = "memberId", required = false) Long memberId, Model model){
+        if (memberId==null){
+            return "redirect:/";
+        }
+        ;
         List<Article> articles = articleService.getAllArticles();
         model.addAttribute("articles",articles);
 
@@ -47,6 +65,12 @@ public class ArticleController {
         return "article";
     }
 
+    @GetMapping("/articleCreateForm")
+    public String createArticleForm(@CookieValue(name = "memberId", required = false) Long memberId){
+        if(memberId == null) return "redirect:/";
+
+        return "articleCreateForm";
+    }
 
     /**
      *   게시물 생성하기
@@ -55,10 +79,20 @@ public class ArticleController {
      *   여기 @ModelAttribute가 들어가는게 맞을지 고민중, Model을 사용하지 않는 것 같음
      */
     @PostMapping("/article")
-    public String createArticle(@ModelAttribute("article") Article article){
+    public String createArticle(@CookieValue(name = "memberId") Long memberId,
+                                @RequestParam (name = "title") String title,
+                                @RequestParam (name = "content") String content){
+
+        Optional<Member> member = memberService.findById(memberId);
+        Article article = Article.builder()
+                .member(member.get())
+                .title(title)
+                .content(content)
+                .build();
+
         articleService.writeArticle(article);
 
-        return "redirect:articles/" + article.getId();
+        return "redirect:/article/" + article.getId();
     }
 
 

@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Comment extends BaseEntity {
+public class Comment {
 
     @Id @Column (name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

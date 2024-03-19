@@ -3,6 +3,7 @@ package example.demo.service;
 
 import example.demo.domain.Member;
 
+import java.util.Optional;
 
 
 public interface MemberService {
@@ -13,5 +14,8 @@ public interface MemberService {
 
     
     // 로그인
-    void login(String loginId, String password);
+    Member login(String loginId, String password);
+
+
+    Optional<Member> findById(Long memberId);
 }
