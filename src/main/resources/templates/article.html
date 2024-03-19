@@ -120,7 +120,7 @@
     <h2>게시글 상세조회</h2>
     <div class="article">
         <div class="article-title" th:text="${article.title}">게시글 제목</div>
-        <div class="article-info">작성자: <span >사용자1</span></div>
+        <div class="article-info">작성자: <span th:text="${article.member.nickname}">사용자1</span></div>
         <div class="article-content" th:text="${article.content}">
 
         </div>
