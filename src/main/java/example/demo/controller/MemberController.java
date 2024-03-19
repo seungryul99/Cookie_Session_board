@@ -66,4 +66,32 @@ public class MemberController {
         return "redirect:/articles";
     }
 
+
+    /**
+     *   쿠키는 클라이언트 쪽에 있는데 id를 통해서 찾아올 수 있는 방법도 없음, 세션은 서버가 관리하는데 쿠키는 아님
+     *
+     *   즉, 쿠키는 서버에서 관리 할 수 없다, 쿠키는 클라이언트 쪽에서 key value형태로 관리되는데 memberId = 1 이런식으로
+     *   우선 response 가 쓰이는 이유는 서버에서 클라이언트의 쿠키를 세팅해주고 싶기 때문임
+     *
+     *   쿠키의 이름은 우리가 쓰던 memberId로 넣고 expireCookie를 돌리면
+     *
+     *   새로운 쿠키를 만들어서 클라이언트의 쿠키에 넣어버리면 키:밸류에서 밸류가 교체가됨
+     *   왜 새로 쿠키를 만들어서 처리함?? 이럴 수 있긴한데
+     *
+     *   클라이언트의 쿠키를 서버에서 관리 할 방법이 없어서 이렇게 하는거고
+     *   cookie.setMaxAge(0)으로 바로 만료 되게 만들어 두는 거임
+     */
+    @PostMapping("/logout")
+    public String logout(HttpServletResponse response){
+        expireCookie(response,"memberId");
+
+        return "redirect:/";
+    }
+
+    private void expireCookie(HttpServletResponse response, String cookieName){
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+    }
+
 }
