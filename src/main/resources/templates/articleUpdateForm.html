@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,39 +32,58 @@
             color: #333;
         }
         input[type="text"],
-        textarea,
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
+        textarea {
+            padding: 11px;
+            margin-bottom: 10px;
             border-radius: 5px;
-            box-sizing: border-box;
+            text-decoration: none;
+            color: black;
+            width: calc(100% - 22px);
         }
         textarea {
             height: 300px;
             resize: none;
         }
-        input[type="submit"] {
-            background-color: #2196F3;
+
+        .blue-button {
+            background-color: #007bff;
             color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
             cursor: pointer;
+            display: inline-block;
+            text-decoration: none; /* 추가 */
+            margin-right: 10px; /* 오른쪽 여백 추가 */
         }
-        input[type="submit"]:hover {
-            background-color: #0b7dda;
+
+        .blue-button:hover {
+            background-color: #0056b3;
         }
+
     </style>
 </head>
 <body>
 <div class="container">
     <h2>게시글 수정</h2>
-    <form action="/post/update" method="post">
+    <form action="/update" method="post">
+        <input type="hidden" id="updatearticleId" name="articleId" th:value="${article.id}">
         <label for="title">제목:</label>
-        <input type="text" id="title" name="title" value="원본 제목" required>
+        <input type="text" id="title" name="title" th:value="${article.title}" required>
         <label for="content">내용:</label>
-        <textarea id="content" name="content" required>원본 내용</textarea>
-        <input type="submit" value="수정하기">
+        <textarea id="content" name="content" th:text="${article.content}" required></textarea>
+        <input class="blue-button" type="submit" value="수정하기">
     </form>
+    <form id="deleteForm" action="/delete" method="post">
+        <input type="hidden" id="deletearticleId" name="articleId" th:value="${article.id}">
+        <button type="submit" class="delete-button blue-button">삭제하기</button>
+    </form>
+
+    <form th:action="@{/article/{articleId}(articleId=${article.id})}">
+        <input type="hidden" id="articleId" name="articleId" th:value="${article.id}">
+        <input type="submit" class="blue-button" value="취소하기">
+    </form>
+
 </div>
 </body>
 </html>

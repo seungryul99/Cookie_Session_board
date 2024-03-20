@@ -65,6 +65,12 @@ public class ArticleController {
         return "article";
     }
 
+
+    /**
+     * 로그인에 대한 권한을 주는거는 필터나 인터셉터를 사용해야하고 어차피 세션 로그인을 하게 되면
+     * 다시 다 바꿔 줘야 하기때문에 일단은 임시로 만들어 주겠음
+     */
+
     @GetMapping("/articleCreateForm")
     public String createArticleForm(@CookieValue(name = "memberId", required = false) Long memberId){
         if(memberId == null) return "redirect:/";
@@ -96,16 +102,42 @@ public class ArticleController {
     }
 
 
+    @GetMapping("/update/{articleId}")
+    public String articleUpdateForm(@PathVariable(name = "articleId") Long articleId, Model model){
+
+        Article article = articleService.getArticle(articleId);
+        model.addAttribute(article);
+
+        return "articleUpdateForm";
+    }
+
     @PostMapping("/update")
-    public String updateArticleForm(@CookieValue(name = "memberId") Long memberId,
-                                    @RequestParam(name = "title") String title,
-                                    @RequestParam(name = "content") String content){
+    public String articleUpdate(@RequestParam (name = "articleId") Long articleId,
+                                @RequestParam (name = "title")String title,
+                                @RequestParam (name = "content") String content,
+                                @CookieValue (name = "memberId") Long memberId,
+                                Model model){
+
+        Optional<Member> member = memberService.findById(memberId);
+        Article article = Article.builder()
+                .id(articleId)
+                .title(title)
+                .content(content)
+                .member(member.get()).build();
 
 
+        model.addAttribute(article);
+        articleService.updateArticle(article);
+
+        return "redirect:/article/"+article.getId();
+    }
 
 
+    @PostMapping("/delete")
+    public String deleteArticle(@RequestParam(name = "articleId") Long articleId){
 
-        return "updateArticleForm";
+        articleService.deleteArticle(articleId);
+        return "redirect:/articles";
     }
 
 

@@ -5,7 +5,9 @@ import example.demo.domain.Member;
 import example.demo.service.MemberService;
 import example.demo.service.MemberServiceImpl;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @Controller
 @RequiredArgsConstructor
@@ -52,16 +56,62 @@ public class MemberController {
     }
 
 
+    /**
+     *  세션쿠키 (시간을 명시하지 않아 브라우저 종료시 로그아웃 되는 쿠키)를 사용하면
+     *  보안 문제에 취약해서 쿠키 로그인 -> 세션 로그인으로 바꿔 줘야한다
+     *
+     *  클라이언트에서 로그인 정보를 주면 서버에서 관리하는 세션에서
+     *  sessionId : value = {무작위값, Member 1} 이런식으로
+     *  매칭을 해서 세션 저장소에 정보를 저장하고
+     *
+     *  클라이언트에게는 쿠키로 sessionId를 사용할 수 있게 해준다
+     *
+     *  그럼 클라이언트가 무작위 UUID인 세션 Id를 넘겨주면
+     *  서버의 세션저장소에서 해당 세션 ID로 접근할 수 있는 개인 정보들에 접근해주는 형식
+     *  세션 id가 털려도 그 자체로는 의미없는 UUID라서 이제 상관이 없음
+     *
+     *  참고로 쿠키는 String, 세션은 Object
+     *
+     *  세션은 쿠키를 사용하긴 하는데 중요한 정보를 서버에서 관리하겠다는 간단한 얘기임
+     *  HttpSession 제공되는거 쓰면 됨
+     *  쿠키 이름은 JSESSIONID, 값은 추정불가능한 랜덤값 (UUID 같은거)
+     *  
+     */
+
+/*
+    // 기존의 세션 쿠키 로그인 방식
     @PostMapping("/login")
     public String login(@RequestParam("loginId") String loginId,
                         @RequestParam("password") String password,
+                        HttpServletRequest request,
                         HttpServletResponse response){
 
+        // 일단 로그인 실패는 고려하지 않음
         Member loginMember = memberService.login(loginId,password);
-        
+
         // 쿠키에 시간에 대한 정보를 주지 않으면 브라우저 종료시 종료되는 세션쿠키가 됨
         Cookie idCookie = new Cookie("memberId", loginMember.getId().toString());
         response.addCookie(idCookie);
+        return "redirect:/articles";
+    }
+*/
+    @PostMapping("/login")
+    public String login(@RequestParam("loginId") String loginId,
+                        @RequestParam("password") String password,
+                        HttpServletRequest request,
+                        HttpServletResponse response){
+
+        // 로그인 실패는 우선 고려하지 않음
+        Member loginMember = memberService.login(loginId,password);
+
+        /**
+         * HTTPServletRequest의 내장 메소드
+         * getSession() : 세션이 있으면 반환해주고 없으면 신규 세션을 생성해줌
+         *
+         * 로그인된 멤버를 세션 저장소에 저장
+         */
+        HttpSession session = request.getSession();
+        session.setAttribute("memberId",loginMember);
 
         return "redirect:/articles";
     }

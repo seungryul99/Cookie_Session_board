@@ -93,7 +93,7 @@ import java.util.List;
 public class Member {
 
     @Id @Column(name = "member_id")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String loginId;

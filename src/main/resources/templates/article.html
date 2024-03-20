@@ -94,7 +94,7 @@
         }
         /* 목록으로 버튼 스타일 */
         .list-button-container {
-            text-align: right;
+            text-align: right; /* 왼쪽 정렬 */
             margin-top: 20px;
             margin-bottom: 20px;
         }
@@ -114,8 +114,8 @@
 
         /* 수정하기 및 삭제하기 버튼 스타일 */
         .edit-delete-buttons {
-            margin-top: 20px;
             text-align: right;
+            float: right; /* 우측으로 부유시킴 */
         }
 
         .edit-delete-buttons a {
@@ -144,15 +144,17 @@
         </div>
     </div>
 
-    <!-- 수정하기 및 삭제하기 버튼 -->
-    <div class="edit-delete-buttons">
-
+    <div class="buttons">
+        <!-- "목록으로" 버튼 -->
+        <div class="list-button-container">
+            <a href="/articles" class="list-button">목록으로</a>
+        </div>
+        <!-- 수정하기 및 삭제하기 버튼 -->
+        <div class="edit-delete-buttons">
+            <a th:href="@{/update/{articleId}(articleId=${article.id})}" class="edit-button">수정하기</a>
+        </div>
     </div>
 
-    <!-- "목록으로" 버튼 -->
-    <div class="list-button-container">
-        <a href="/articles" class="list-button">목록으로</a>
-    </div>
 
     <br/><br/><br/>
     <div class="comments">
