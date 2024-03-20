@@ -40,11 +40,8 @@ public class ArticleController {
     
     // 만약 쿠키를 가지고 있지 않은 사용자가 URL로 articles 에 뚫고 들어오려고 할 때 예외처리룰 위해서 required=false를 사용했는데 이게 맞는지는 모르겠다
     @GetMapping("/articles")
-    public String articles(@CookieValue(name = "memberId", required = false) Long memberId, Model model){
-        if (memberId==null){
-            return "redirect:/";
-        }
-        ;
+    public String articles(Model model){
+
         List<Article> articles = articleService.getAllArticles();
         model.addAttribute("articles",articles);
 
@@ -72,8 +69,7 @@ public class ArticleController {
      */
 
     @GetMapping("/articleCreateForm")
-    public String createArticleForm(@CookieValue(name = "memberId", required = false) Long memberId){
-        if(memberId == null) return "redirect:/";
+    public String createArticleForm(){
 
         return "articleCreateForm";
     }

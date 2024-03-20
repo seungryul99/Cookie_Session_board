@@ -98,20 +98,32 @@ public class MemberController {
     @PostMapping("/login")
     public String login(@RequestParam("loginId") String loginId,
                         @RequestParam("password") String password,
-                        HttpServletRequest request,
-                        HttpServletResponse response){
+                        HttpServletRequest request){
 
         // 로그인 실패는 우선 고려하지 않음
         Member loginMember = memberService.login(loginId,password);
 
         /**
          * HTTPServletRequest의 내장 메소드
-         * getSession() : 세션이 있으면 반환해주고 없으면 신규 세션을 생성해줌
+         * getSession(true) : 세션이 있으면 반환해주고 없으면 신규 세션을 생성해줌, default = true
          *
-         * 로그인된 멤버를 세션 저장소에 저장
+         * 로그인된 멤버를 세션 저장소에 저장해줌
+         *
+         * loginMember에서 로그인 된 Member 객체를 찾아오면 사용자가 날린 request에서 getSession을 통해서 세션이 있나 확인하고
+         * 세션이 없으면 서버에서 새로 만들어줌, 이 때 HttpServletSession을 이용해서 세션을 생성해줌
+         * 세션은 그냥 클래스 같은 거라고 생각해보자, 세션에도 세션을 식별하는 고유 아이디가 있는데 이게 JSESSIONID가 되고 UUID 마냥 랜덤 값으로 들어가니까,
+         * 클라이언트에게 이 JSESSIONID를 넘겨주면됨, 근데 이거 서블릿을 사용하는 거라서 알아서 처리해줌 내가 response.addCookie 하면서 전달해 줄 필요는 없음
+         * 서블릿이란 내가 핵심로직에만 집중하고 귀찮은건 대신해줌
+         *
+         * 그 후 session.setAttribute를 통해서 서버의 key:value로 되어있는 세션 저장소에  key로 쿠키에 있는 JsessionId를 통해서 지금의 경우
+         * loginmember라는 객체를 넣어줬는데 실제로는 value에 해당 객체의 레퍼런스가 저장됨, 세션 자체는 메모리에 있음
+         *
+         * 여튼 세션아이디를 세션저장소의 키로, 원하는 값이나 객체를 value로 넣어줌
          */
+
         HttpSession session = request.getSession();
-        session.setAttribute("memberId",loginMember);
+        String sessionId = session.getId();
+        session.setAttribute(sessionId,loginMember);
 
         return "redirect:/articles";
     }
