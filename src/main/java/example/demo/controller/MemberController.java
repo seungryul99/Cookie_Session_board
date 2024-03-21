@@ -3,11 +3,14 @@ package example.demo.controller;
 
 import example.demo.domain.Member;
 import example.demo.service.MemberService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -118,9 +121,7 @@ public class MemberController {
                         @RequestParam("password") String password,
                         HttpServletRequest request){
 
-        // 로그인 실패는 우선 고려하지 않음
-        Member loginMember = memberService.login(loginId,password);
-        if(loginMember==null) return "redirect:/login";
+
 
         /**
          * HTTPServletRequest의 내장 메소드
@@ -139,12 +140,15 @@ public class MemberController {
          *
          * 여튼 세션아이디를 세션저장소의 키로, 원하는 값이나 객체를 value로 넣어줌
          */
+        Member loginMember = memberService.login(loginId,password);
 
         HttpSession session = request.getSession();
         String sessionId = session.getId();
         session.setAttribute(sessionId,loginMember);
+        // 로그인 실패는 우선 고려하지 않음
 
-        return "redirect:/articles";
+        if(loginMember==null) return "redirect:/login";
+        else return "redirect:/articles";
     }
 
 
@@ -193,7 +197,7 @@ public class MemberController {
     */
 
     @PostMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request, HttpServletResponse response){
         
         // false일 경우 세션이 없으면 새로 만들지 않음
         HttpSession session = request.getSession(false);
@@ -202,6 +206,19 @@ public class MemberController {
         if(session != null){
             session.invalidate();
         }
+
+
+        /**
+         *  기존에 세션을 만들어서 사용하던 방식에서는 직접 세션저장소에 세션을 추가한 후
+         *  addCookie를 이용해서 사용자의 쿠키저장소의 쿠키를 갱신해줬다
+         *  근데 HttpSession이 들어오면서 이 과정을 자동으로 SetCookie를 해줬는데
+         *  해제된 세션과 관련된 쿠키의 MaxAge를 0으로 설정함으로써
+         *  쿠키를 없애버리는 과정을 자동으로 해주지는 않아서 쿠키를 모두 삭제해 버렸다
+         *
+         *  애초에 그런기능 없이 만들어 졌다고 하니까 구현해서 사용하자
+         */
+
+        memberService.expireJsessionId(request, response);
 
         return "redirect:/";
     }

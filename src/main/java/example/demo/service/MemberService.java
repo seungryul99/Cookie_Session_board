@@ -2,6 +2,9 @@ package example.demo.service;
 
 
 import example.demo.domain.Member;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.CookieValue;
 
 import java.util.Optional;
 
@@ -18,4 +21,7 @@ public interface MemberService {
 
 
     Optional<Member> findById(Long memberId);
+
+
+    void expireJsessionId(HttpServletRequest request, HttpServletResponse response);
 }
