@@ -3,20 +3,14 @@ package example.demo.controller;
 
 import example.demo.domain.Member;
 import example.demo.service.MemberService;
-import example.demo.service.MemberServiceImpl;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.net.http.HttpRequest;
 
 
 @Controller
@@ -27,17 +21,17 @@ public class MemberController {
     private final MemberService memberService;
 
 
+    // 모두에게 허용
     @GetMapping("/")
     public String index(HttpServletRequest request){
-
         HttpSession session = request.getSession(false);
 
-        if(session == null) return "index";
-
-        return "redirect:/articles";
+        if (session == null) return "redirect:/login";
+        else return "redirect:/articles";
     }
 
 
+    // 모두에게 허용
     @GetMapping("/signup")
     public String signupForm(){
         return "signup";
@@ -52,6 +46,8 @@ public class MemberController {
      *   문제는 회원가입을 하고 인덱스 화면으로 넘어가는데 사실 Model이 쓰이지 않는다
      *   이러면 의도치 않은 SideEffect가 발생할 수 있다, 그래서 그냥 @RequestParam으로 필요한것만 받아주는 걸로 결정
      */
+
+    // 모두에게 허용
     @PostMapping("/signup")
     public String signup(@RequestParam("loginId") String loginId,
                          @RequestParam("password") String password,
@@ -108,6 +104,15 @@ public class MemberController {
         return "redirect:/articles";
     }
 */
+
+    // 모두에게 허용
+    @GetMapping("/login")
+    public String loginview(){
+        return "login";
+    }
+
+
+    // 모두에게 허용
     @PostMapping("/login")
     public String login(@RequestParam("loginId") String loginId,
                         @RequestParam("password") String password,
@@ -115,6 +120,7 @@ public class MemberController {
 
         // 로그인 실패는 우선 고려하지 않음
         Member loginMember = memberService.login(loginId,password);
+        if(loginMember==null) return "redirect:/login";
 
         /**
          * HTTPServletRequest의 내장 메소드

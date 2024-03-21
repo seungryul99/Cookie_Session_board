@@ -42,16 +42,12 @@ public class ArticleController {
     
     // 만약 쿠키를 가지고 있지 않은 사용자가 URL로 articles 에 뚫고 들어오려고 할 때 예외처리룰 위해서 required=false를 사용했는데 이게 맞는지는 모르겠다
     @GetMapping("/articles")
-    public String articles(Model model, HttpServletRequest request){
+    public String articles(Model model){
 
         // /articles라는 요청이 왔을 때, request에 session이 있는지 확인
         // 없으면 새로 만들어 주지 않고 null을 넣어줌
         // 만약 null이 들어있으면
         // 이게 다 권한이 없는 사용자가 URL 조작으로
-        HttpSession session = request.getSession(false);
-        if(session==null){
-            return "redirect:/";
-        }
 
         List<Article> articles = articleService.getAllArticles();
         model.addAttribute("articles",articles);
@@ -115,18 +111,18 @@ public class ArticleController {
     public String createArticle(@RequestParam (name = "title") String title,
                                 @RequestParam (name = "content") String content,
                                 HttpServletRequest request){
-        
-        // 쿠키에 있는 세션 id를 통해서 세션 저장소에 있는 member 객체의 레퍼런스를 들고와서 거기서 memberId를 꺼낼거임
-        HttpSession session = request.getSession(false);
-        if (session == null){
-            return "redirect:/";
-        }
-
 
         // 지금 세션 저장소에 세션 id : member 레퍼런스로 저장이 되어 있다
         // 따라서 세션에서 세션 아이디를 통해 getAttribute를 해오면? 원하는 멤버의 객체가 들어있다
         // 문제는 페이지 마다 모든 권한을 이런식으로 하나하나 줄 수는 없다. 그래서 스프링의 인터셉터와 필터를 공부해 봐야 한다
+        // 공통된 문제를 처리하기 위해서는 AOP를 알아야 하는데 로그인 권한 같은 웹 관련해서는 인터셉터나 필터가 있기 때문에 AOP는 아직 몰라도 됨
+        // 필터는 서블릿이 제공하는 기능이고 인터셉터는 스프링 MVC가 제공하는 기능임
+        // 필터는 프론트 컨트롤러 (디스패처 서블릿)으로 가기전에 적용된다면, 인터셉터는 그 후 적용됨, 스프링 MVC의 시작점이 디스패처 서블릿이기 때문
+        // 인터셉터가 필터보다 훤씬 정밀한 설정이 가능함
+        // 인터셉터에는 컨트롤러 실행 전에 수행되는 preHandle이 있고, 컨트롤러 실행후에 수행되는 postHandle도 있고 afterCompletion (뷰 랜더링 후)
+        // 이렇게 단계적으로 수행할 수 있게 나눠둠
 
+        HttpSession session=request.getSession();
         String sessionId = session.getId();
         Member member = (Member) session.getAttribute(sessionId);
 
