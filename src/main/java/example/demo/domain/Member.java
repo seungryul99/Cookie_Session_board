@@ -82,7 +82,8 @@ import java.util.List;
  *
  *  근데 이건 기본내용은 아닌거 같으니 나중에 해보고 일단은 @Builder로 빌더패턴을 쓰자
  *
-
+ *
+ * @Entity
  */
 @Entity
 @Getter

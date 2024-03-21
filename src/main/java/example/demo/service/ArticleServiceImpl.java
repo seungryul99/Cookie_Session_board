@@ -67,7 +67,9 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Transactional
     @Override
-    public void writeArticle(Article article) {articleRepository.save(article);}
+    public void writeArticle(Article article) {
+        articleRepository.save(article);
+    }
 
     @Override
     public List<Article> getAllArticles() {

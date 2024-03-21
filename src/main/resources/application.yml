@@ -26,3 +26,12 @@ logging.level:
 
 
 # 여긴 나중에 공부, 대충 DB 연결 세팅과 로그관리 할때 초기 설정하는 곳
+
+
+# 세션을 30분으로 설정, 여기에 글로벌로 걸어주면 코드 단에서
+# session.setMaxInactiveInterval(1800); //1800초
+# 안해줘도 됨, 그냥 세션에서 마지막 요청시점에 1800 초씩 갱신 해주는 거임
+server:
+  servlet:
+    session:
+      timeout: 1800

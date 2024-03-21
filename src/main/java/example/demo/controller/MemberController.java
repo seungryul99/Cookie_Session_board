@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.net.http.HttpRequest;
 
 
 @Controller
@@ -24,6 +25,18 @@ public class MemberController {
 
     @Autowired
     private final MemberService memberService;
+
+
+    @GetMapping("/")
+    public String index(HttpServletRequest request){
+
+        HttpSession session = request.getSession(false);
+
+        if(session == null) return "index";
+
+        return "redirect:/articles";
+    }
+
 
     @GetMapping("/signup")
     public String signupForm(){
@@ -142,7 +155,23 @@ public class MemberController {
      *
      *   클라이언트의 쿠키를 서버에서 관리 할 방법이 없어서 이렇게 하는거고
      *   cookie.setMaxAge(0)으로 바로 만료 되게 만들어 두는 거임
+     *
+     *  HTTP세션은 원래 웹브라우저가 종료되면 자동으로 없어짐
+     * 
+     *   세션의 종료 시점은 언제로 두는게 좋을까??
+     *   세션을 처음 생성한 시점부터 ~~분 이면, 멀쩡히 로그인 상태로 무언가 작업을 하다가
+     *   30분 마다 재 로그인을 해줘야하는 상황이 된다
+     *
+     *   그래서 사용자가 서버에 최근에 요청한 시간을 기준으로 ~~분을 유지해주는 방식을 사용한다
+     *
+     *   근데 HttpSession을 이용하면 결국 세션 DB(저장소)를 사용하게 된다 세션은 메모리에 있지만
+     *   세션 DB를 이용할 때마다 DB 자원을 사용하게 된다. 그래서 그 다음으로 나온게 토큰 로그인
+     *   
+     *   토큰 로그인 다음으로 나온게 JWT 로그인
      */
+    
+    /*
+    // 기존 로그아웃 코드
     @PostMapping("/logout")
     public String logout(HttpServletResponse response){
         expireCookie(response,"memberId");
@@ -154,6 +183,21 @@ public class MemberController {
         Cookie cookie = new Cookie(cookieName, null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
+    }
+    */
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request){
+        
+        // false일 경우 세션이 없으면 새로 만들지 않음
+        HttpSession session = request.getSession(false);
+        
+        // 세션이 있는 경우 세션을 제거함
+        if(session != null){
+            session.invalidate();
+        }
+
+        return "redirect:/";
     }
 
 }
