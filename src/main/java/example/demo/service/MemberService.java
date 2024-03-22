@@ -1,6 +1,7 @@
 package example.demo.service;
 
 
+import example.demo.domain.Article;
 import example.demo.domain.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,4 +25,6 @@ public interface MemberService {
 
 
     void expireJsessionId(HttpServletRequest request, HttpServletResponse response);
+
+    void checkMemberPermission(HttpServletRequest request, Article article);
 }

@@ -2,17 +2,21 @@ package example.demo.controller;
 
 import example.demo.domain.Article;
 import example.demo.domain.Member;
+import example.demo.exception.MemberPermissionMismatchException;
 import example.demo.service.ArticleService;
 import example.demo.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -156,13 +160,20 @@ public class ArticleController {
      *   이렇게 처리해도 될지는 의문이다
      *
      *   누군가 URL 조작으로 버튼이 안보이지만 뚫고 들어갈 수도 있지 않을까 생각이 들었음
+     *
+     *   찾아보니 화면단에서 타임리프로 수정하기 버튼 공개 여부 설정 + 실제 수정이후에도 권한 검증로직이 필요할 것 같다
      */
 
     // 로그인 된 사용자 중 자신의 게시글 에서만 허용, 권한 미 완료, 자신의 글 수정 하기
-    @GetMapping("/update/{articleId}")
-    public String articleUpdateForm(@PathVariable(name = "articleId") Long articleId, Model model){
 
+    // RedirectAttributes
+    @GetMapping("/update/{articleId}")
+    public String articleUpdateForm(@PathVariable(name = "articleId") Long articleId, Model model,
+                                    HttpServletRequest request){
+
+        // articleId를 통해서 article을 찾아오고 그안에있는 member의 memberId를 찾아와서 권한 검증에 이용함
         Article article = articleService.getArticle(articleId);
+        memberService.checkMemberPermission(request, article);
         model.addAttribute(article);
 
         return "articleUpdateForm";
