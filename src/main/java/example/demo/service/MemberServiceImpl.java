@@ -2,6 +2,8 @@ package example.demo.service;
 
 import example.demo.domain.Article;
 import example.demo.domain.Member;
+import example.demo.dto.request.LoginRequest;
+import example.demo.dto.request.SignupRequest;
 import example.demo.exception.MemberPermissionMismatchException;
 import example.demo.exception.PasswordMismatchException;
 import example.demo.repository.MemberRepository;
@@ -27,16 +29,22 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public void saveMember(Member member) {
+    public void saveMember(SignupRequest signupRequest) {
+        Member member = Member.builder()
+                .loginId(signupRequest.getLoginId())
+                .password(signupRequest.getPassword())
+                .nickname(signupRequest.getNickname())
+                .build();
+
         memberRepository.save(member);
     }
 
     @Override
-    public Member login(String loginId, String password) {
+    public Member login(LoginRequest loginRequest) {
 
-        if (memberRepository.existsByLoginId(loginId)) {
-            Member realMember = memberRepository.findByLoginId(loginId);
-            checkPassword(password, realMember.getPassword());
+        if (memberRepository.existsByLoginId(loginRequest.getLoginId())) {
+            Member realMember = memberRepository.findByLoginId(loginRequest.getLoginId());
+            checkPassword(loginRequest.getPassword(), realMember.getPassword());
             return realMember;
         }
         return null;

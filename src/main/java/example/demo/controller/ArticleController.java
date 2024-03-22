@@ -2,11 +2,9 @@ package example.demo.controller;
 
 import example.demo.domain.Article;
 import example.demo.domain.Member;
-import example.demo.exception.MemberPermissionMismatchException;
 import example.demo.service.ArticleService;
 import example.demo.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 @Controller
@@ -178,7 +175,6 @@ public class ArticleController {
 
     // 로그인 된 사용자 중 자신의 게시글 에서만 허용, 권한 미 완료, 자신의 글 수정 하기
 
-    // RedirectAttributes
     @GetMapping("/update/{articleId}")
     public String articleUpdateForm(@PathVariable(name = "articleId") Long articleId, Model model,
                                     HttpServletRequest request){

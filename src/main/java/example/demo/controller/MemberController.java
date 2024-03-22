@@ -2,15 +2,15 @@ package example.demo.controller;
 
 
 import example.demo.domain.Member;
+import example.demo.dto.request.LoginRequest;
+import example.demo.dto.request.SignupRequest;
 import example.demo.service.MemberService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,13 +56,8 @@ public class MemberController {
                          @RequestParam("password") String password,
                          @RequestParam("nickname") String nickname) {
 
-        Member member = Member.builder()
-                .loginId(loginId)
-                .password(password)
-                .nickname(nickname)
-                .build();
-
-        memberService.saveMember(member);
+        SignupRequest signupRequest = new SignupRequest(loginId,password,nickname);
+        memberService.saveMember(signupRequest);
 
         return "redirect:/";
     }
@@ -121,8 +116,6 @@ public class MemberController {
                         @RequestParam("password") String password,
                         HttpServletRequest request){
 
-
-
         /**
          * HTTPServletRequest의 내장 메소드
          * getSession(true) : 세션이 있으면 반환해주고 없으면 신규 세션을 생성해줌, default = true
@@ -140,7 +133,11 @@ public class MemberController {
          *
          * 여튼 세션아이디를 세션저장소의 키로, 원하는 값이나 객체를 value로 넣어줌
          */
-        Member loginMember = memberService.login(loginId,password);
+
+        LoginRequest loginRequest = new LoginRequest(loginId,password);
+
+
+        Member loginMember = memberService.login(loginRequest);
 
         HttpSession session = request.getSession();
         String sessionId = session.getId();
