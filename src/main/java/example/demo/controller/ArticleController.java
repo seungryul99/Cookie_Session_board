@@ -39,8 +39,9 @@ public class ArticleController {
      *      memberId 라는 쿠키를 꺼내와서 바인딩 해줌
      *      쿠키에 들어갈때 Long -> String 으로 넣어줬음
      */
-    
-    // 만약 쿠키를 가지고 있지 않은 사용자가 URL로 articles 에 뚫고 들어오려고 할 때 예외처리룰 위해서 required=false를 사용했는데 이게 맞는지는 모르겠다
+
+
+    // 로그인 된 모두에게 허용, 권한 완료, 모든 게시글 리스트로 모아 보기
     @GetMapping("/articles")
     public String articles(Model model){
 
@@ -62,7 +63,9 @@ public class ArticleController {
      *   이를 모델에 저장, article.html(뷰) dptj article이라는 이름으로 이를 참조 가능
      */
 
-    
+
+
+    // 로그인 된 모두에게 허용, 권한 완료, 특정 게시글 조회하기
     @GetMapping("/article/{articleId}")
     public String readArticle(@PathVariable("articleId") Long articleId, Model model){
         Article article = articleService.getArticle(articleId);
@@ -76,6 +79,8 @@ public class ArticleController {
      * 다시 다 바꿔 줘야 하기때문에 일단은 임시로 만들어 주겠음
      */
 
+
+    // 로그인 된 모두에게 허용, 권한 완료, 게시글 생성 폼으로 이동
     @GetMapping("/articleCreateForm")
     public String createArticleForm(){
 
@@ -107,6 +112,9 @@ public class ArticleController {
         return "redirect:/article/" + article.getId();
     }
     */
+
+
+    // 로그인 된 모두에게 허용, 권한 완료, 게시글 생성하기
     @PostMapping("/article")
     public String createArticle(@RequestParam (name = "title") String title,
                                 @RequestParam (name = "content") String content,
@@ -137,8 +145,20 @@ public class ArticleController {
         return "redirect:/article/" + article.getId();
 
     }
-    
 
+
+    /**
+     *   자신의 게시글만 수정, 삭제할 수 있도록 하는 기능은
+     *   타임리프를 이용해서 게시글의 MemberId와 현재 사용자의 MemberId가 같은 경우에만 화면에 수정하기 버튼이 나타나게 할 생각이고
+     *
+     *   수정하기 버튼으로 들어가면 삭제하기가 포함되어 있게 할 예정인데
+     *
+     *   이렇게 처리해도 될지는 의문이다
+     *
+     *   누군가 URL 조작으로 버튼이 안보이지만 뚫고 들어갈 수도 있지 않을까 생각이 들었음
+     */
+
+    // 로그인 된 사용자 중 자신의 게시글 에서만 허용, 권한 미 완료, 자신의 글 수정 하기
     @GetMapping("/update/{articleId}")
     public String articleUpdateForm(@PathVariable(name = "articleId") Long articleId, Model model){
 
@@ -148,6 +168,7 @@ public class ArticleController {
         return "articleUpdateForm";
     }
 
+    // 로그인 된 사용자 중 자신의 게시글 에서만 허용, 권한 미 완료, 자신의 글 수정 요청
     @PostMapping("/update")
     public String articleUpdate(@RequestParam (name = "articleId") Long articleId,
                                 @RequestParam (name = "title")String title,
@@ -170,6 +191,8 @@ public class ArticleController {
     }
 
 
+
+    // 로그인 된 사용자중 자신의 게시글에서만 허용, 권한 미 완료, 자신의 글 삭제하기
     @PostMapping("/delete")
     public String deleteArticle(@RequestParam(name = "articleId") Long articleId){
 

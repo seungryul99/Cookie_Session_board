@@ -32,6 +32,8 @@ logging.level:
 # session.setMaxInactiveInterval(1800); //1800초
 # 안해줘도 됨, 그냥 세션에서 마지막 요청시점에 1800 초씩 갱신 해주는 거임
 # Cookie 저거 안넣어주면 가끔 쿠키가 URL에 들어갈 때가 있음
+# 예를 들어 쿠키에 저장되어 있는 정보를 서블릿이 사용할때 이를 유지 시키기 위해서 URL에 올려놓고 사용하는 경우가 있는데
+# 오직 쿠키를 거쳐서 사용할 수 있도록 조절해 줘야함
 server:
   servlet:
     session:

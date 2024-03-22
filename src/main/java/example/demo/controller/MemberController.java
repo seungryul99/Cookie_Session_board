@@ -24,7 +24,7 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    // 모두에게 허용
+    // 모두에게 허용, localhost8080:/ 에대한 누구나 날리는 요청
     @GetMapping("/")
     public String index(HttpServletRequest request){
         HttpSession session = request.getSession(false);
@@ -34,7 +34,7 @@ public class MemberController {
     }
 
 
-    // 모두에게 허용
+    // 모두에게 허용, 회원가입폼으로 이동
     @GetMapping("/signup")
     public String signupForm(){
         return "signup";
@@ -50,7 +50,7 @@ public class MemberController {
      *   이러면 의도치 않은 SideEffect가 발생할 수 있다, 그래서 그냥 @RequestParam으로 필요한것만 받아주는 걸로 결정
      */
 
-    // 모두에게 허용
+    // 모두에게 허용, 권한 완료, 회원가입 요청
     @PostMapping("/signup")
     public String signup(@RequestParam("loginId") String loginId,
                          @RequestParam("password") String password,
@@ -108,14 +108,14 @@ public class MemberController {
     }
 */
 
-    // 모두에게 허용
+    // 모두에게 허용, 권한 완료, 로그인 페이지로 이동
     @GetMapping("/login")
     public String loginview(){
         return "login";
     }
 
 
-    // 모두에게 허용
+    // 모두에게 허용, 권한 완료, 로그인 요청
     @PostMapping("/login")
     public String login(@RequestParam("loginId") String loginId,
                         @RequestParam("password") String password,
@@ -196,6 +196,8 @@ public class MemberController {
     }
     */
 
+
+    // 권한 완료, 로그아웃은 따로 추가적인 처리가 필요해서 공통처리에서 안함
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
         
