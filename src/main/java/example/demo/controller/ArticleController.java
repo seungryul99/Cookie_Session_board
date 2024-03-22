@@ -71,9 +71,21 @@ public class ArticleController {
 
     // 로그인 된 모두에게 허용, 권한 완료, 특정 게시글 조회하기
     @GetMapping("/article/{articleId}")
-    public String readArticle(@PathVariable("articleId") Long articleId, Model model){
+    public String readArticle(@PathVariable("articleId") Long articleId, Model model,
+                              RedirectAttributes redirectAttributes,
+                              HttpServletRequest request){
         Article article = articleService.getArticle(articleId);
         model.addAttribute("article",article);
+
+        
+        // Service로 넘겨 줄 예정
+        HttpSession session = request.getSession(false);
+        String sessionId = session.getId();
+        Member member = (Member) session.getAttribute(sessionId);
+
+        if(Objects.equals(article.getMember().getId(), member.getId())) {
+            model.addAttribute("status",true);
+        }
 
         return "article";
     }
@@ -184,15 +196,18 @@ public class ArticleController {
     public String articleUpdate(@RequestParam (name = "articleId") Long articleId,
                                 @RequestParam (name = "title")String title,
                                 @RequestParam (name = "content") String content,
-                                @CookieValue (name = "memberId") Long memberId,
+                                HttpServletRequest request,
                                 Model model){
 
-        Optional<Member> member = memberService.findById(memberId);
+        HttpSession session = request.getSession(false);
+        String sessionId = session.getId();
+        Member member = (Member) session.getAttribute(sessionId);
+
         Article article = Article.builder()
                 .id(articleId)
                 .title(title)
                 .content(content)
-                .member(member.get()).build();
+                .member(member).build();
 
 
         model.addAttribute(article);
@@ -205,8 +220,11 @@ public class ArticleController {
 
     // 로그인 된 사용자중 자신의 게시글에서만 허용, 권한 미 완료, 자신의 글 삭제하기
     @PostMapping("/delete")
-    public String deleteArticle(@RequestParam(name = "articleId") Long articleId){
+    public String deleteArticle(@RequestParam(name = "articleId") Long articleId,
+                                HttpServletRequest request){
 
+        Article article = articleService.getArticle(articleId);
+        memberService.checkMemberPermission(request, article);
         articleService.deleteArticle(articleId);
         return "redirect:/articles";
     }

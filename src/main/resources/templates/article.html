@@ -150,7 +150,7 @@
             <a href="/articles" class="list-button">목록으로</a>
         </div>
         <!-- 수정하기 및 삭제하기 버튼 -->
-        <div class="edit-delete-buttons">
+        <div th:if="${status}" class="edit-delete-buttons">
             <a th:href="@{/update/{articleId}(articleId=${article.id})}" class="edit-button">수정하기</a>
         </div>
     </div>
