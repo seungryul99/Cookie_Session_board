@@ -143,7 +143,7 @@ public class ArticleController {
         // 인터셉터에는 컨트롤러 실행 전에 수행되는 preHandle이 있고, 컨트롤러 실행후에 수행되는 postHandle도 있고 afterCompletion (뷰 랜더링 후)
         // 이렇게 단계적으로 수행할 수 있게 나눠둠
 
-        HttpSession session=request.getSession();
+        HttpSession session=request.getSession(false);
         String sessionId = session.getId();
         Member member = (Member) session.getAttribute(sessionId);
 
